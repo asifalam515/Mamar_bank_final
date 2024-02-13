@@ -1,22 +1,22 @@
-from typing import Any
 from django import forms
 from .models import Transaction
-
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields =['amount','transaction_type',]
-    
-    def __init__(self,*args, **kwargs):
-        self.account = kwargs.pop('account')
-        super.__init__(*args, **kwargs)
-        self.fields['transaction_type'].disabled =True
-        self.fields['transaction_type'].widget=forms.HiddenInput()
-        
-        
-    def save(self, commit= True) :
+        fields = [
+            'amount',
+            'transaction_type'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self.account = kwargs.pop('account') # account value ke pop kore anlam
+        super().__init__(*args, **kwargs)
+        self.fields['transaction_type'].disabled = True # ei field disable thakbe
+        self.fields['transaction_type'].widget = forms.HiddenInput() # user er theke hide kora thakbe
+
+    def save(self, commit=True):
         self.instance.account = self.account
-        self.instance.balance_after_transaction = self.account.balance 
+        self.instance.balance_after_transaction = self.account.balance
         return super().save()
 
 
@@ -30,7 +30,8 @@ class DepositForm(TransactionForm):
             )
 
         return amount
-    
+
+
 class WithdrawForm(TransactionForm):
 
     def clean_amount(self):
@@ -56,7 +57,9 @@ class WithdrawForm(TransactionForm):
             )
 
         return amount
-    
+
+
+
 class LoanRequestForm(TransactionForm):
     def clean_amount(self):
         amount = self.cleaned_data.get('amount')
