@@ -131,7 +131,7 @@ class TransactionReportView(LoginRequiredMixin, ListView):
         else:
             self.balance = self.request.user.account.balance
        
-        return queryset.distinct() # unique queryset hote hobe
+        return queryset# unique queryset hote hobe
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -157,7 +157,7 @@ class PayLoanView(LoginRequiredMixin, View):
                 loan.loan_approved = True
                 loan.transaction_type = LOAN_PAID
                 loan.save()
-                return redirect('transactions:loan_list')
+                return redirect('loan_list')
             else:
                 messages.error(
             self.request,
