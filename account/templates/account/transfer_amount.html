@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head_title %}Transfer Amount{% endblock %}
+
+{% block body %}
+<div style="background-color: rgb(209 213 219)" class="justify-center">
+    <h1>Transfer Amount</h1>
+
+<form method="post" action="{% url 'transfer_amount' %}">
+    {% csrf_token %}
+    {{form|crispy}}
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+        Transfer
+      </button>
+      <br>
+</form>
+
+{% if messages %}
+    {% for message in messages %}
+        <div>{{ message }}</div>
+    {% endfor %}
+{% endif %}
+</div>
+
+{% endblock %}

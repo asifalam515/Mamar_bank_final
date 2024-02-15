@@ -129,3 +129,15 @@ class UserUpdateForm(forms.ModelForm):
             user_address.save()
 
         return user            
+    
+
+from django import forms
+
+class TransferAmountForm(forms.Form):
+    sender_username = forms.CharField(label='Sender Username', max_length=100)
+    receiver_username = forms.CharField(label='Receiver Username', max_length=100)
+    amount = forms.FloatField(label='Amount')
+
+
+class CheckWithdrawalForm(forms.Form):
+    pass

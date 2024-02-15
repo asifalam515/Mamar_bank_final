@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from django.views.generic import FormView
-from .forms import UserRegistrationForm,UserUpdateForm
+from .forms import UserRegistrationForm,UserUpdateForm,TransferAmountForm,CheckWithdrawalForm
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import reverse,reverse_lazy
 from django.views import View
-
+from .models import User
+from django.contrib import messages
 # Create your views here.
 class UserRegistrationView(FormView):
     template_name = 'account/user_registration.html'
@@ -50,3 +51,42 @@ class UserBankAccountUpdateView(View):
         return render(request, self.template_name, {'form': form})
     
     
+    
+def transfer_amount(request):
+    form = TransferAmountForm(request.POST or None)
+
+    if form.is_valid():
+        sender_username = form.cleaned_data['sender_username']
+        receiver_username = form.cleaned_data['receiver_username']
+        amount = form.cleaned_data['amount']
+
+        try:
+            sender = User.objects.get(username=sender_username)
+            receiver = User.objects.get(username=receiver_username)
+
+            if sender.balance >= amount:
+                sender.balance -= amount
+                receiver.balance += amount
+                sender.save()
+                receiver.save()
+
+                messages.success(request, 'Amount transferred successfully.')
+            else:
+                messages.error(request, 'Insufficient funds for the transfer.')
+        except User.DoesNotExist:
+            messages.error(request, 'User not found.')
+
+    return render(request, 'account/transfer_amount.html', {'form': form})
+    
+def check_withdrawal(request):
+    form = CheckWithdrawalForm(request.POST or None)
+
+    if form.is_valid():
+        user = User.objects.get(username=request.user.username)
+
+        if user.balance > 0:
+            messages.success(request, 'Withdrawal successful.')
+        else:
+            messages.error(request, 'The bank is bankrupt. Unable to withdraw.')
+
+    return render(request, 'account/check_withdrawal.html', {'form': form})

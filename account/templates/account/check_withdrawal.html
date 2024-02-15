@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}Check Withdrawal{% endblock %}
+
+{% block body %}
+<div style="background-color: rgb(209 213 219);
+">
+    <h1>Check Withdrawal</h1>
+
+<form method="post" action="{% url 'check_withdrawal' %}">
+    {% csrf_token %}
+    {{form|crispy}}
+    <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 ">Check Withdrawal</button>
+</form>
+
+{% if messages %}
+    {% for message in messages %}
+        <div>{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+</div>
+{% endblock %}
