@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'mamar_bank_virtual.wsgi.application'
 
 ...
 # Your secret key
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = "django-insecure-s!b2=8-h)gm%le)7^g$28-b8xrps*znvct$oys-&od$md_1a0k"
 ...
 # DATABASES = {
 #     'default': {
