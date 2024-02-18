@@ -7,6 +7,14 @@ from django.urls import reverse,reverse_lazy
 from django.views import View
 from .models import User
 from django.contrib import messages
+from django.contrib.auth.views import PasswordChangeView
+from .forms import ChangePasswordForm
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm,SetPasswordForm
+from django.contrib.auth import authenticate,login,logout,update_session_auth_hash
+
 # Create your views here.
 class UserRegistrationView(FormView):
     template_name = 'account/user_registration.html'
@@ -90,3 +98,25 @@ def check_withdrawal(request):
             messages.error(request, 'The bank is bankrupt. Unable to withdraw.')
 
     return render(request, 'account/check_withdrawal.html', {'form': form})
+
+
+
+# @method_decorator(login_required, name='dispatch')
+# class PasswordChangeView(PasswordChangeView):
+#     template_name = 'account/change_password.html'
+#     success_url = reverse_lazy('register')
+
+def change_password(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form =PasswordChangeForm(user = request.user,data =request.POST)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request,request.user) #password update korbe
+                return redirect('profile')
+        else:
+            form=PasswordChangeForm(user=request.user)    
+        return render(request,'account/change_password.html',{'form':form})
+    else:
+        return redirect('login')
+            
