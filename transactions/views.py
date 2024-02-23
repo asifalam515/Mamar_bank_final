@@ -29,6 +29,30 @@ def send_transaction_email(user,amount,subject,template):
         send_email =EmailMultiAlternatives(subject,'',to =[user.email])
         send_email.attach_alternative(message,"text/html")
         send_email.send()
+
+def send_transfer_email(sender,receiver,amount,subject,template):
+       
+        message = render_to_string(template,{
+            'sender':sender,
+            'receiver': receiver,
+            'amount':amount
+        })
+        
+        send_email =EmailMultiAlternatives(subject,'',to =[sender.email,receiver.email])
+        send_email.attach_alternative(message,"text/html")
+        send_email.send()
+    
+
+def send_password_change_email(user,subject,template):
+       
+        message = render_to_string(template,{
+            'user':user,
+            
+        })
+        
+        send_email =EmailMultiAlternatives(subject,'',to =[user.email])
+        send_email.attach_alternative(message,"text/html")
+        send_email.send()
     
 
 

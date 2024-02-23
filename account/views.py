@@ -14,6 +14,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm,SetPasswordForm
 from django.contrib.auth import authenticate,login,logout,update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from transactions.views import send_password_change_email,send_transfer_email
 
 # Create your views here.
 class UserRegistrationView(FormView):
@@ -59,7 +61,7 @@ class UserBankAccountUpdateView(View):
         return render(request, self.template_name, {'form': form})
     
     
-    
+@login_required   
 def transfer_amount(request):
     form = TransferAmountForm(request.POST or None)
 
@@ -79,6 +81,7 @@ def transfer_amount(request):
                 receiver.save()
 
                 messages.success(request, 'Amount transferred successfully.')
+                send_transfer_email(sender,receiver,amount,"Balance Transfer",'account/transfer_amount.html')
             else:
                 messages.error(request, 'Insufficient funds for the transfer.')
         except User.DoesNotExist:
@@ -105,18 +108,14 @@ def check_withdrawal(request):
 # class PasswordChangeView(PasswordChangeView):
 #     template_name = 'account/change_password.html'
 #     success_url = reverse_lazy('register')
-
+@login_required
 def change_password(request):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            form =PasswordChangeForm(user = request.user,data =request.POST)
-            if form.is_valid():
-                form.save()
-                update_session_auth_hash(request,request.user) #password update korbe
-                return redirect('profile')
-        else:
-            form=PasswordChangeForm(user=request.user)    
-        return render(request,'account/change_password.html',{'form':form})
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            send_password_change_email(request.user,"Password Changed ",'account/change_password_email.html')
+            return redirect('profile')  
     else:
-        return redirect('login')
-            
+        form = ChangePasswordForm(request.user)
+    return render(request, 'account/change_password.html', {'form': form})

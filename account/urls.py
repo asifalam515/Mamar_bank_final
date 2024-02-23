@@ -9,6 +9,6 @@ urlpatterns = [
     path('profile/', UserBankAccountUpdateView.as_view(), name='profile' ),
     path('transfer_amount/', transfer_amount, name='transfer_amount'),
     path('check_withdrawal/', check_withdrawal, name='check_withdrawal'),
-    path('change_password/', change_password, name='change_password'),
+    path('change_password/', change_password,name='change_password'),
     
 ]

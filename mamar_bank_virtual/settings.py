@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'core',
     'transactions',
     'django.contrib.humanize',
-    "crispy_forms",
+   
+      "crispy_forms",
     "crispy_bootstrap5",
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -88,26 +89,26 @@ WSGI_APPLICATION = 'mamar_bank_virtual.wsgi.application'
 # Your secret key
 SECRET_KEY = "django-insecure-s!b2=8-h)gm%le)7^g$28-b8xrps*znvct$oys-&od$md_1a0k"
 ...
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': env("DB_NAME"),
-#         'USER': env("DB_USER"),
-#         'PASSWORD': env("DB_PASSWORD"),
-#         'HOST': env("DB_HOST"),
-#         'PORT': env("DB_PORT"),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
+    }
+}
 
 # Database documentation https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgres://mamar_bank_dcr0_user:1oeBfd2Nha52nZLVG3z6QaFizC8ySSBS@dpg-cn87riv109ks739n27p0-a.oregon-postgres.render.com/mamar_bank_dcr0',
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default='postgres://mamar_bank_dcr0_user:1oeBfd2Nha52nZLVG3z6QaFizC8ySSBS@dpg-cn87riv109ks739n27p0-a.oregon-postgres.render.com/mamar_bank_dcr0',
         
-    )
-}
+#     )
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

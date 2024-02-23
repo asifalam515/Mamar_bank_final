@@ -144,16 +144,12 @@ class TransferAmountForm(forms.Form):
 class CheckWithdrawalForm(forms.Form):
     pass
 
+   
 class ChangePasswordForm(PasswordChangeForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({
-               'class' : (
-                    'appearance-none block w-full bg-gray-200 '
-                    'text-gray-700 border border-gray-200 rounded '
-                    'py-3 px-4 leading-tight focus:outline-none '
-                    'focus:bg-white focus:border-gray-500'
-                ) 
-            })
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label='Old Password')
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label='New Password')
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label='Confirm New Password')
+
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password1', 'new_password2']
